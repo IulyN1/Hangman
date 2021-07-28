@@ -40,6 +40,8 @@ private:
 	QHBoxLayout* lyWord = new QHBoxLayout;
 	QStringList words = {"WATER","FOOD","HANGMAN","LEGEND","CODING","LOVE","MICROSOFT","WINDOWS"};
 	QString currentWord;
+	QString used = "Used letters: ";
+	QLabel* usedLetters = new QLabel{ used };
 
 	// Function that initializes the GUI components
 	void initGui();

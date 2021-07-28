@@ -14,6 +14,7 @@ void GUI::initGui() {
 	lyHang->addWidget(hangman);
 	lyHang->addLayout(lyWord);
 	ly->addLayout(lyHang);
+	ly->addWidget(usedLetters);
 
 	QHBoxLayout* lyBtns1 = new QHBoxLayout;
 	lyBtns1->addWidget(btnA);
@@ -63,6 +64,10 @@ void GUI::checkLetter(char let) {
 	if (!found) {
 		mistakes++;
 	}
+	used += let;
+	used += " ";
+	usedLetters->setText(used);
+
 	switch (mistakes) {
 	case 0:
 		hangman->setPixmap(QPixmap("resources/hangman1.png"));
@@ -86,9 +91,6 @@ void GUI::checkLetter(char let) {
 		hangman->setPixmap(QPixmap("resources/hangman7.png"));
 		break;
 	}
-	if (mistakes == 6) {
-		result->setText("Result: You lost!");
-	}
 	int aux = 0;
 	for (int i = 0; i < currentWord.length(); i++) {
 		auto letter = qobject_cast<QLabel*>(lyWord->itemAt(i + 1)->widget());
@@ -96,8 +98,11 @@ void GUI::checkLetter(char let) {
 			aux++;
 		}
 	}
-	if (aux == 0) {
+	if (aux == 0 && mistakes < 6) {
 		result->setText("Result: You won!");
+	}
+	if (mistakes == 6 && aux != 0) {
+		result->setText("Result: You lost!");
 	}
 }
 
@@ -107,6 +112,9 @@ void GUI::connectSignals() {
 		mistakes = 0;
 		hangman->setPixmap(QPixmap("resources/hangman1.png"));
 		result->setText("Result:");
+		used = "Used letters: ";
+		usedLetters->setText(used);
+		usedLetters->show();
 
 		int num = rand() % words.size();
 		currentWord = words[num];
@@ -208,4 +216,5 @@ void GUI::connectSignals() {
 
 void GUI::setInitialState() {
 	hangman->setPixmap(QPixmap("resources/hangman1.png"));
+	usedLetters->hide();
 }
